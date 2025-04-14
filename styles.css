@@ -1420,6 +1420,97 @@ footer {
     font-style: italic;
 }
 
+/* Presale Info Styling */
+.presale-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin: 40px 0;
+}
+
+@media (min-width: 768px) {
+    .presale-info {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.presale-card {
+    background: rgba(17, 17, 17, 0.8);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.presale-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.presale-card h3 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.presale-card h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--gold-gradient);
+    border-radius: 2px;
+}
+
+.presale-form {
+    margin-top: 25px;
+}
+
+.presale-form .form-group {
+    margin-bottom: 20px;
+}
+
+.presale-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #e6e6e6;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.presale-form input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.presale-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.presale-form input[readonly] {
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: not-allowed;
+}
+
+.presale-form .btn {
+    margin-top: 10px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-content {
@@ -2028,10 +2119,6 @@ footer {
     flex-wrap: wrap;
 }
 
-.action-buttons .btn-primary {
-    min-width: 200px;
-}
-
 .btn-secondary {
     display: inline-block;
     padding: 14px 28px;
@@ -2108,5 +2195,349 @@ footer {
 @keyframes shimmer {
     100% {
         transform: translateX(100%);
+    }
+}
+
+/* Mobile Responsiveness Improvements */
+@media (max-width: 768px) {
+    /* Navigation */
+    .nav-content {
+        flex-direction: column;
+        padding: 15px 20px;
+    }
+    
+    .logo-container {
+        margin-bottom: 15px;
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+    
+    .nav-links a, .nav-links button {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+    }
+    
+    /* Hero Section */
+    .hero {
+        padding: 80px 0;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+        max-width: 100%;
+    }
+    
+    /* Sections */
+    section {
+        padding: 60px 0;
+    }
+    
+    section h2 {
+        font-size: 2.2rem;
+        margin-bottom: 30px;
+    }
+    
+    /* Cards and Grids */
+    .features-grid, 
+    .use-cases-grid, 
+    .token-info, 
+    .dashboard-grid,
+    .staking-info,
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .feature-card, 
+    .use-case-card, 
+    .info-card,
+    .dashboard-card,
+    .staking-card {
+        padding: 20px;
+    }
+    
+    /* Presale Section */
+    .progress-container {
+        width: 100%;
+    }
+    
+    .presale-info {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Founder Section */
+    .founder-content {
+        flex-direction: column;
+        padding: 25px;
+    }
+    
+    .founder-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 2rem;
+    }
+    
+    .founder-info h3 {
+        font-size: 1.8rem;
+    }
+    
+    /* Modal */
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+        margin: 20% auto;
+    }
+    
+    /* Forms */
+    .form-group input,
+    .presale-form input {
+        padding: 10px;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 12px 20px;
+    }
+    
+    /* User Dashboard */
+    .transaction-table {
+        overflow-x: auto;
+    }
+    
+    .transaction-table table {
+        min-width: 600px;
+    }
+    
+    /* Fix for small screens */
+    .container {
+        padding: 0 15px;
+    }
+}
+
+/* Extra Small Devices */
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    section h2 {
+        font-size: 1.8rem;
+    }
+    
+    .feature-card h3,
+    .use-case-card h3,
+    .info-card h3,
+    .dashboard-card h3 {
+        font-size: 1.4rem;
+    }
+    
+    .connect-btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .founder-quotes blockquote {
+        padding: 15px 20px;
+        font-size: 0.95rem;
+    }
+    
+    .modal h2 {
+        font-size: 1.6rem;
+    }
+    
+    .presale-card h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    z-index: 100;
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-color);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+    
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.95);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        transform: translateY(-100%);
+        transition: transform 0.4s ease;
+        z-index: 90;
+        padding: 50px 20px;
+    }
+    
+    .nav-links.active {
+        transform: translateY(0);
+    }
+    
+    .nav-links a, 
+    .nav-links button {
+        font-size: 1.2rem;
+        margin: 5px 0;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        transition-delay: 0s;
+    }
+    
+    .nav-links.active a, 
+    .nav-links.active button {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .nav-links.active a:nth-child(1) { transition-delay: 0.1s; }
+    .nav-links.active a:nth-child(2) { transition-delay: 0.2s; }
+    .nav-links.active a:nth-child(3) { transition-delay: 0.3s; }
+    .nav-links.active button:nth-child(4) { transition-delay: 0.4s; }
+    .nav-links.active button:nth-child(5) { transition-delay: 0.5s; }
+    .nav-links.active button:nth-child(6) { transition-delay: 0.6s; }
+}
+
+/* Additional Mobile Improvements */
+@media (max-width: 768px) {
+    /* Fix for buttons */
+    .auth-btn, .connect-btn {
+        margin: 5px 0;
+        padding: 12px;
+        width: 100%;
+    }
+    
+    /* Fix for token cards */
+    .token-info {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    /* Improve presale progress bar */
+    .progress-bar {
+        height: 15px;
+    }
+    
+    /* Fix for founder section */
+    .founder-section h2 {
+        font-size: 2.2rem;
+    }
+    
+    .founder-quotes blockquote {
+        font-size: 1rem;
+    }
+    
+    /* Fix for wallet dashboard */
+    .wallet-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Improve tables on mobile */
+    table {
+        font-size: 0.9rem;
+    }
+    
+    /* Fix for footer */
+    .footer-section {
+        margin-bottom: 30px;
+    }
+    
+    /* Improve spacing */
+    .container {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 100%;
+        padding: 0 20px;
+    }
+    
+    /* Fix for buy/sell forms */
+    .presale-form .form-group {
+        margin-bottom: 15px;
+    }
+    
+    /* Improve modal scrolling */
+    .modal {
+        overflow-y: auto;
+    }
+    
+    /* Fix for hero section */
+    .hero-content {
+        padding: 0 20px;
+    }
+}
+
+/* Fix for very small devices */
+@media (max-width: 375px) {
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .presale-card {
+        padding: 20px 15px;
+    }
+    
+    .founder-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 2rem;
+    }
+    
+    .modal-content {
+        padding: 15px;
+    }
+    
+    .form-group label {
+        font-size: 0.9rem;
+    }
+    
+    .form-group input {
+        font-size: 0.9rem;
     }
 }

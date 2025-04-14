@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AhsanVerse</title>
     <link rel="stylesheet" href="styles.css">
     <!-- Load ethers.js from unpkg CDN -->
@@ -15,7 +15,12 @@
                 <img src="images/logo.svg" alt="AhsanCoin Logo" class="site-logo">
                 <a href="#" class="logo">AhsanVerse</a>
             </div>
-            <div class="nav-links">
+            <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
                 <a href="#features">Features</a>
                 <a href="#invest">Why Invest</a>
                 <a href="#tokenomics">Tokenomics</a>
@@ -322,6 +327,38 @@
                         <p><span id="raisedAmount">$0</span> / $250,000</p>
                     </div>
                     
+                    <div class="presale-info">
+                        <div class="presale-card">
+                            <h3>Buy AHV Tokens</h3>
+                            <div class="presale-form">
+                                <div class="form-group">
+                                    <label for="payAmount">ETH Amount</label>
+                                    <input type="number" id="payAmount" placeholder="0.00" min="0.01" step="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label for="receiveAmount">AHV Tokens to Receive</label>
+                                    <input type="number" id="receiveAmount" placeholder="0" readonly>
+                                </div>
+                                <button id="buyTokens" class="btn primary-btn">Buy Tokens</button>
+                            </div>
+                        </div>
+                        
+                        <div class="presale-card">
+                            <h3>Sell AHV Tokens</h3>
+                            <div class="presale-form">
+                                <div class="form-group">
+                                    <label for="sellAmount">AHV Tokens to Sell</label>
+                                    <input type="number" id="sellAmount" placeholder="0.00" min="1" step="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="receiveEthAmount">ETH to Receive (Est.)</label>
+                                    <input type="number" id="receiveEthAmount" placeholder="0" readonly>
+                                </div>
+                                <button id="sellTokens" class="btn primary-btn">Sell Tokens</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="token-info">
                         <div class="info-card">
                             <h3>Token Sold</h3>

@@ -21,6 +21,7 @@ const TOKEN_ABI = [
     
     // Presale Functions
     "function buyTokens() external payable",
+    "function sellTokens(uint256 amount) external returns (bool)",
     "function setPresalePrice(uint256 _price) external",
     "function withdrawETH() external",
     "function getPresaleStats() view returns (uint256 raised, uint256 sold, uint256 remaining)",
@@ -28,7 +29,8 @@ const TOKEN_ABI = [
     // Events
     "event Transfer(address indexed from, address indexed to, uint256 value)",
     "event Approval(address indexed owner, address indexed spender, uint256 value)",
-    "event TokensPurchased(address indexed buyer, uint256 amount, uint256 cost)"
+    "event TokensPurchased(address indexed buyer, uint256 amount, uint256 cost)",
+    "event TokensSold(address indexed seller, uint256 amount, uint256 reward)"
 ];
 
 // Token Configuration
@@ -55,8 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const payAmountInput = document.getElementById('payAmount');
     const receiveAmountInput = document.getElementById('receiveAmount');
     const buyTokensButton = document.getElementById('buyTokens');
+    const sellAmountInput = document.getElementById('sellAmount');
+    const receiveEthAmountInput = document.getElementById('receiveEthAmount');
+    const sellTokensButton = document.getElementById('sellTokens');
     const demoTokenPurchaseButton = document.getElementById('demoTokenPurchase');
     
+    // Mobile Menu Elements
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navLinks = document.getElementById('navLinks');
+    const navLinksItems = document.querySelectorAll('#navLinks a, #navLinks button');
+
     // Authentication Elements
     const loginBtn = document.getElementById('loginBtn');
     const registerBtn = document.getElementById('registerBtn');
@@ -137,6 +147,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Calculate ETH on token amount change for selling
+    if (sellAmountInput) {
+        sellAmountInput.addEventListener('input', async (e) => {
+            const tokenAmount = parseFloat(e.target.value) || 0;
+            // Apply a 5% fee for selling tokens
+            const ethToReceive = (tokenAmount * TOKEN_CONFIG.presalePrice) / 3000 * 0.95; 
+            if (receiveEthAmountInput) {
+                receiveEthAmountInput.value = ethToReceive.toFixed(6);
+            }
+        });
+    }
+
     // Buy tokens
     if (buyTokensButton) {
         buyTokensButton.addEventListener('click', async () => {
@@ -146,79 +168,168 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const ethAmount = payAmountInput.value;
+                const ethAmount = parseFloat(payAmountInput.value);
                 if (!ethAmount || ethAmount <= 0) {
                     alert('Please enter a valid amount');
                     return;
                 }
 
-                // DEMO MODE: Instead of sending an actual transaction, simulate it
-                const simulateTransaction = true; // Set to false for real transactions when deployed
+                // Check if wallet is connected
+                if (!walletAddress) {
+                    alert('Please connect your wallet first');
+                    await connectWallet();
+                    if (!walletAddress) return; // Exit if wallet connection failed
+                }
+
+                // Real blockchain transaction
+                // First, create a contract instance
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+                const tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
                 
-                if (simulateTransaction) {
-                    // Get token amount from input
-                    const tokenAmount = parseFloat(receiveAmountInput.value);
+                // Convert ETH amount to Wei
+                const weiAmount = ethers.utils.parseEther(ethAmount.toString());
+                
+                // Show processing message
+                alert('Processing your transaction. Please confirm in MetaMask...');
+                
+                // Call the buyTokens function on the contract
+                const transaction = await tokenContract.buyTokens({
+                    value: weiAmount,
+                    gasLimit: 300000 // Set appropriate gas limit
+                });
+                
+                // Wait for transaction to be mined
+                const receipt = await transaction.wait();
+                
+                // Get token amount from transaction events
+                let tokenAmount = 0;
+                const transferEvent = receipt.events.find(event => event.event === 'TokensPurchased');
+                if (transferEvent && transferEvent.args) {
+                    tokenAmount = parseFloat(ethers.utils.formatUnits(transferEvent.args.amount, 18));
+                } else {
+                    // If event not found, calculate based on price
+                    tokenAmount = (ethAmount * 3000) / TOKEN_CONFIG.presalePrice;
+                }
+                
+                // Add transaction to history if user is logged in
+                const currentUser = JSON.parse(localStorage.getItem('ahsanverseCurrentUser') || '{}');
+                if (currentUser && currentUser.loggedIn) {
+                    // Add transaction with completed status
+                    addTransaction('Purchase', tokenAmount, 'AHV', 'Completed');
                     
-                    // Show processing message
-                    alert('Processing your purchase in demo mode (no actual ETH will be spent)');
-                    
-                    // Add transaction to history if user is logged in
-                    const currentUser = JSON.parse(localStorage.getItem('ahsanverseCurrentUser') || '{}');
-                    if (currentUser && currentUser.loggedIn) {
-                        // Add transaction with pending status
-                        addTransaction('Purchase', tokenAmount, 'AHV', 'Pending');
-                        
-                        // Update token balance (simulated)
-                        const userTokenBalance = document.getElementById('userTokenBalance');
-                        if (userTokenBalance) {
-                            const currentBalance = parseFloat(userTokenBalance.textContent) || 0;
-                            userTokenBalance.textContent = (currentBalance + tokenAmount).toFixed(2);
+                    // Update token balance
+                    const userTokenBalance = document.getElementById('userTokenBalance');
+                    if (userTokenBalance) {
+                        // Get actual token balance from blockchain
+                        try {
+                            const balance = await tokenContract.balanceOf(walletAddress);
+                            const formattedBalance = parseFloat(ethers.utils.formatUnits(balance, 18)).toFixed(2);
+                            userTokenBalance.textContent = formattedBalance;
+                        } catch (error) {
+                            console.error('Error fetching token balance:', error);
                         }
-                        
-                        // After a delay, update transaction to completed (simulated blockchain confirmation)
-                        setTimeout(() => {
-                            // Get the latest transactions
-                            const transactions = JSON.parse(localStorage.getItem(`ahsanverse_transactions_${currentUser.email}`) || '[]');
-                            
-                            // Find the pending transaction and update it
-                            const pendingIndex = transactions.findIndex(t => t.status === 'Pending');
-                            if (pendingIndex !== -1) {
-                                transactions[pendingIndex].status = 'Completed';
-                                localStorage.setItem(`ahsanverse_transactions_${currentUser.email}`, JSON.stringify(transactions));
-                                
-                                // Reload transactions in UI
-                                loadUserTransactions();
-                            }
-                        }, 3000); // Simulate 3-second blockchain confirmation
                     }
-                    
-                    // Show success message after a short delay
-                    setTimeout(() => {
-                        alert(`Transaction successful! You have purchased ${tokenAmount} AHV tokens.`);
-                    }, 1500);
-                    
+                }
+                
+                // Show success message
+                alert(`Transaction successful! You have purchased ${tokenAmount.toFixed(2)} AHV tokens. Transaction hash: ${receipt.transactionHash}`);
+                
+                // Update UI
+                updateUI();
+            } catch (error) {
+                console.error('Error buying tokens:', error);
+                alert(`Transaction failed: ${error.message || 'Unknown error'}`);
+            }
+        });
+    }
+
+    // Sell tokens
+    if (sellTokensButton) {
+        sellTokensButton.addEventListener('click', async () => {
+            if (!window.ethereum) {
+                alert('Please install MetaMask to sell tokens!');
+                return;
+            }
+
+            try {
+                const tokenAmount = parseFloat(sellAmountInput.value);
+                if (!tokenAmount || tokenAmount <= 0) {
+                    alert('Please enter a valid amount of tokens to sell');
                     return;
                 }
 
-                // REAL TRANSACTION MODE (only used when deployed to production)
-                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                const account = accounts[0];
+                // Check if wallet is connected
+                if (!walletAddress) {
+                    alert('Please connect your wallet first');
+                    await connectWallet();
+                    if (!walletAddress) return; // Exit if wallet connection failed
+                }
 
-                const transactionParameters = {
-                    to: TOKEN_ADDRESS,
-                    from: account,
-                    value: ethers.utils.parseEther(ethAmount).toHexString()
-                };
-
-                const txHash = await ethereum.request({
-                    method: 'eth_sendTransaction',
-                    params: [transactionParameters],
+                // Create contract instance
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+                const tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
+                
+                // First check if user has enough tokens
+                const balance = await tokenContract.balanceOf(walletAddress);
+                const formattedBalance = parseFloat(ethers.utils.formatUnits(balance, 18));
+                
+                if (formattedBalance < tokenAmount) {
+                    alert(`You don't have enough tokens. Your balance: ${formattedBalance.toFixed(2)} AHV`);
+                    return;
+                }
+                
+                // Convert token amount to Wei (with 18 decimals)
+                const tokenAmountWei = ethers.utils.parseUnits(tokenAmount.toString(), 18);
+                
+                // Show processing message
+                alert('Processing your sell transaction. Please confirm in MetaMask...');
+                
+                // Call the sellTokens function on the contract
+                const transaction = await tokenContract.sellTokens(tokenAmountWei, {
+                    gasLimit: 300000 // Set appropriate gas limit
                 });
-
-                alert('Transaction sent! Hash: ' + txHash);
+                
+                // Wait for transaction to be mined
+                const receipt = await transaction.wait();
+                
+                // Calculate ETH received (could also get from events)
+                const ethReceived = parseFloat(receiveEthAmountInput.value);
+                
+                // Add transaction to history if user is logged in
+                const currentUser = JSON.parse(localStorage.getItem('ahsanverseCurrentUser') || '{}');
+                if (currentUser && currentUser.loggedIn) {
+                    // Add transaction with completed status
+                    addTransaction('Sell', tokenAmount, 'AHV', 'Completed');
+                    
+                    // Update token balance
+                    const userTokenBalance = document.getElementById('userTokenBalance');
+                    if (userTokenBalance) {
+                        // Get actual token balance from blockchain
+                        try {
+                            const newBalance = await tokenContract.balanceOf(walletAddress);
+                            const formattedNewBalance = parseFloat(ethers.utils.formatUnits(newBalance, 18)).toFixed(2);
+                            userTokenBalance.textContent = formattedNewBalance;
+                        } catch (error) {
+                            console.error('Error fetching token balance:', error);
+                        }
+                    }
+                }
+                
+                // Show success message
+                alert(`Transaction successful! You have sold ${tokenAmount.toFixed(2)} AHV tokens for approximately ${ethReceived.toFixed(6)} ETH. Transaction hash: ${receipt.transactionHash}`);
+                
+                // Update UI
+                updateUI();
+                
+                // Clear input fields
+                sellAmountInput.value = '';
+                receiveEthAmountInput.value = '';
+                
             } catch (error) {
-                console.error(error);
-                alert('Error buying tokens: ' + error.message);
+                console.error('Error selling tokens:', error);
+                alert(`Transaction failed: ${error.message || 'Unknown error'}`);
             }
         });
     }
@@ -269,6 +380,30 @@ document.addEventListener('DOMContentLoaded', () => {
             registerModal.style.display = 'none';
         }
     });
+
+    // Mobile Menu Toggle
+    if (mobileMenuToggle && navLinks) {
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        navLinksItems.forEach(item => {
+            item.addEventListener('click', () => {
+                mobileMenuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                mobileMenuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+    }
 });
 
 // Update token information in UI
