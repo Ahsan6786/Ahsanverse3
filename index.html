@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AhsanVerse</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Load ethers.js from unpkg CDN -->
+    <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-content">
+            <div class="logo-container">
+                <img src="images/logo.svg" alt="AhsanCoin Logo" class="site-logo">
+                <a href="#" class="logo">AhsanVerse</a>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#invest">Why Invest</a>
+                <a href="#tokenomics">Tokenomics</a>
+                <button id="loginBtn" class="auth-btn">Login</button>
+                <button id="registerBtn" class="auth-btn">Register</button>
+                <button id="connectWallet" class="connect-btn">Connect Wallet</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to AhsanVerse</h1>
+                <p>Pioneering the future of blockchain technology with innovative solutions and decentralized applications</p>
+            </div>
+        </section>
+
+        <section class="wallet-section" id="walletInfo">
+            <div class="container">
+                <h2>Wallet Dashboard</h2>
+                <div class="wallet-grid">
+                    <div class="wallet-card">
+                        <h3>Wallet Address</h3>
+                        <p id="walletAddress"></p>
+                    </div>
+                    <div class="wallet-card">
+                        <h3>Balance</h3>
+                        <p><span id="walletBalance"></span> ETH</p>
+                    </div>
+                    <div class="wallet-card">
+                        <h3>Network</h3>
+                        <p id="networkName">Ethereum Mainnet</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Overview Section -->
+        <section class="tech-overview-section">
+            <div class="container">
+                <h2>🔧 Technology Overview</h2>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <h3>High-Performance Blockchain Infrastructure</h3>
+                        <ul>
+                            <li>Built on an EVM-compatible blockchain for seamless dApp development</li>
+                            <li>Utilizes a secure and scalable consensus mechanism</li>
+                            <li>Low latency, energy-efficient transactions suitable for mass adoption</li>
+                        </ul>
+                    </div>
+                    <div class="tech-card">
+                        <h3>AI Integration at Core</h3>
+                        <ul>
+                            <li>Native support for AI-enhanced smart contracts</li>
+                            <li>On-chain execution of ML models with real-time inference capabilities</li>
+                            <li>Decentralized storage and compute layers for AI data processing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases Section -->
+        <section class="use-cases-section">
+            <div class="container">
+                <h2> Use Cases & Applications</h2>
+                <div class="use-cases-grid">
+                    <div class="use-case-card">
+                        <div class="use-case-number">1</div>
+                        <h3>AI-Powered Decentralized Applications (dApps)</h3>
+                        <p>Deploy smart dApps that adapt to user behavior using machine learning</p>
+                        <p>From personalized DeFi tools to AI-driven marketplaces</p>
+                    </div>
+                    <div class="use-case-card">
+                        <div class="use-case-number">2</div>
+                        <h3>Intelligent DeFi Ecosystem</h3>
+                        <p>Predictive analytics for yield farming and risk assessment</p>
+                        <p>AI-powered robo-advisors for decentralized investment strategies</p>
+                        <p>Fraud detection using machine learning</p>
+                    </div>
+                    <div class="use-case-card">
+                        <div class="use-case-number">3</div>
+                        <h3>Autonomous Smart Contracts</h3>
+                        <p>Contracts that update based on real-world data and AI insights</p>
+                        <p>Dynamic pricing models, SLA enforcement, and compliance checks</p>
+                    </div>
+                    <div class="use-case-card">
+                        <div class="use-case-number">4</div>
+                        <h3>Decentralized AI Marketplace</h3>
+                        <p>A platform for AI developers to share, monetize, and collaborate on AI models</p>
+                        <p>Tokenized access to datasets and pre-trained models</p>
+                    </div>
+                    <div class="use-case-card">
+                        <div class="use-case-number">5</div>
+                        <h3>AI for Enterprise Automation</h3>
+                        <p>Scalable tools for supply chain automation, customer analytics, and smart logistics</p>
+                        <p>Integration layers for AI + blockchain-powered ERP solutions</p>
+                    </div>
+                </div>
+                <div class="ecosystem-goals">
+                    <h3> Ecosystem Goals</h3>
+                    <ul>
+                        <li>Democratize access to AI and blockchain technology</li>
+                        <li>Foster innovation by supporting developers and startups</li>
+                        <li>Build a self-sustaining, community-driven AI-blockchain ecosystem</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Dashboard Section -->
+        <section class="user-dashboard" id="userDashboard">
+            <div class="container">
+                <h2>User Dashboard</h2>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Welcome, <span id="userDisplayName">User</span></h3>
+                        <p>Manage your AhsanVerse account and tokens.</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>AHV Token Balance</h3>
+                        <p><span id="userTokenBalance">0</span> AHV</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Account Status</h3>
+                        <p id="userAccountStatus">Active</p>
+                    </div>
+                </div>
+                
+                <div class="transaction-history">
+                    <h3>Transaction History</h3>
+                    <div class="transaction-table-container">
+                        <table class="transaction-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionHistory">
+                                <!-- Transactions will be added here dynamically -->
+                                <tr class="no-transactions">
+                                    <td colspan="4">No transactions yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="user-settings">
+                    <h3>Account Settings</h3>
+                    <form id="userSettingsForm">
+                        <div class="form-group">
+                            <label for="userDisplayNameInput">Display Name</label>
+                            <input type="text" id="userDisplayNameInput">
+                        </div>
+                        <div class="form-group">
+                            <label for="userEmailInput">Email</label>
+                            <input type="email" id="userEmailInput" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="userNotifications">Email Notifications</label>
+                            <select id="userNotifications">
+                                <option value="all">All Updates</option>
+                                <option value="important">Important Only</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary">Save Changes</button>
+                    </form>
+                </div>
+                
+                <!-- Token Staking Section -->
+                <div class="staking-section">
+                    <h3>AHV Token Staking</h3>
+                    <div class="staking-info">
+                        <div class="staking-card">
+                            <h4>Staking Balance</h4>
+                            <p><span id="stakingBalance">0</span> AHV</p>
+                        </div>
+                        <div class="staking-card">
+                            <h4>Rewards Earned</h4>
+                            <p><span id="stakingRewards">0</span> AHV</p>
+                        </div>
+                        <div class="staking-card">
+                            <h4>APY</h4>
+                            <p><span id="stakingAPY">12</span>%</p>
+                        </div>
+                    </div>
+                    
+                    <div class="staking-actions">
+                        <div class="staking-form">
+                            <h4>Stake Tokens</h4>
+                            <div class="form-group">
+                                <label for="stakeAmount">Amount to Stake</label>
+                                <input type="number" id="stakeAmount" min="0" step="1" placeholder="0">
+                            </div>
+                            <button id="stakeTokens" class="btn-primary">Stake Tokens</button>
+                        </div>
+                        
+                        <div class="staking-form">
+                            <h4>Unstake Tokens</h4>
+                            <div class="form-group">
+                                <label for="unstakeAmount">Amount to Unstake</label>
+                                <input type="number" id="unstakeAmount" min="0" step="1" placeholder="0">
+                            </div>
+                            <button id="unstakeTokens" class="btn-primary">Unstake Tokens</button>
+                        </div>
+                        
+                        <div class="staking-form">
+                            <h4>Claim Rewards</h4>
+                            <p>Available Rewards: <span id="availableRewards">0</span> AHV</p>
+                            <button id="claimRewards" class="btn-primary">Claim Rewards</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features-section">
+            <div class="container">
+                <h2>Why Choose Us?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>AI-Powered DApps</h3>
+                        <p>Experience next-generation decentralized applications powered by advanced AI algorithms</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Data Marketplace</h3>
+                        <p>Trade and monetize data securely on our blockchain-powered marketplace</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>DeFi Integration</h3>
+                        <p>Access innovative financial services with our AI-enhanced DeFi solutions</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="invest" class="invest-section">
+            <div class="container">
+                <h2>Why Invest in AhsanVerse?</h2>
+                <div class="invest-grid">
+                    <div class="invest-card">
+                        <h3>Innovation Leadership</h3>
+                        <p>AhsanVerse is at the forefront of blockchain innovation, combining AI technology with decentralized solutions to create a unique ecosystem.</p>
+                    </div>
+                    <div class="invest-card">
+                        <h3>Strong Growth Potential</h3>
+                        <p>Early investment opportunity in a rapidly expanding market with projected significant growth in the blockchain and AI sectors.</p>
+                    </div>
+                    <div class="invest-card">
+                        <h3>Real-World Utility</h3>
+                        <p>Our platform solves actual business challenges with practical applications across multiple industries.</p>
+                    </div>
+                    <div class="invest-card">
+                        <h3>Community Driven</h3>
+                        <p>Active community participation in governance decisions and platform development ensures long-term sustainability.</p>
+                    </div>
+                    <div class="invest-card">
+                        <h3>Innovative Technology Stack</h3>
+                        <p>Built on cutting-edge blockchain technology with AI integration, smart contracts, and cross-chain compatibility for future-proof scalability and interoperability.</p>
+                    </div>
+                    <div class="invest-card">
+                        <h3>Strategic Partnerships</h3>
+                        <p>Established partnerships with leading tech companies, financial institutions, and blockchain networks to accelerate adoption and create valuable ecosystem synergies.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tokenomics" class="tokenomics-section">
+            <div class="container">
+                <h2>Tokenomics</h2>
+                <div class="token-stats">
+                    <div class="stat-card">
+                        <h3>Current Price</h3>
+                        <p class="current-price">$0.05</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Next Stage Price</h3>
+                        <p class="next-price">$0.07</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Supply</h3>
+                        <p class="total-supply">531,000,000 AHV</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="presale-section">
+            <div class="container">
+                <h2>PRESALE START</h2>
+                <div class="presale-stats">
+                    <div class="progress-container">
+                        <h3>Raised</h3>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 0%"></div>
+                        </div>
+                        <p><span id="raisedAmount">$0</span> / $250,000</p>
+                    </div>
+                    
+                    <div class="token-info">
+                        <div class="info-card">
+                            <h3>Token Sold</h3>
+                            <p><span id="tokensSold">0</span> AHV</p>
+                        </div>
+                        <div class="info-card">
+                            <h3>Total Presale Tokens</h3>
+                            <p>265,500,000 AHV</p>
+                        </div>
+                    </div>
+
+                    <div class="price-info">
+                        <div class="current-price">
+                            <h3>Current Price</h3>
+                            <p>$0.05</p>
+                        </div>
+                        <div class="next-price">
+                            <h3>Next Stage Price</h3>
+                            <p>$0.07</p>
+                        </div>
+                    </div>
+
+                    <div class="purchase-form">
+                        <div class="input-group">
+                            <label>You Pay (ETH)</label>
+                            <input type="number" id="payAmount" min="0" step="0.01" placeholder="0.00">
+                        </div>
+                        <div class="input-group">
+                            <label>You Receive (AHV)</label>
+                            <input type="number" id="receiveAmount" readonly placeholder="0.00">
+                        </div>
+                        <button id="buyTokens" class="buy-btn">Buy Tokens</button>
+                        <button id="demoTokenPurchase" class="buy-btn demo-btn" style="margin-top: 10px; background: #4a4a4a;">Demo Purchase (No MetaMask)</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="founder-section">
+            <div class="container">
+                <h2>Founder of AhsanCoin</h2>
+                <div class="founder-content">
+                    <div class="founder-image">
+                        <div class="founder-avatar">
+                            <span>AK</span>
+                        </div>
+                    </div>
+                    <div class="founder-info">
+                        <h3>Ahsan Imam Khan</h3>
+                        <p class="founder-location">India</p>
+                        <div class="founder-bio">
+                            <p>Visionary entrepreneur and blockchain enthusiast with a passion for creating decentralized solutions that empower individuals across the globe.</p>
+                            <div class="founder-quotes">
+                                <blockquote>"Innovation distinguishes between a leader and a follower. At AhsanVerse, we're building the future of blockchain technology."</blockquote>
+                                <blockquote>"The greatest reward of building AhsanCoin is seeing how it transforms lives and creates opportunities for people everywhere."</blockquote>
+                                <blockquote>"Success is not final, failure is not fatal: it is the courage to continue that counts. This principle guides our development at AhsanVerse."</blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="action-section">
+            <div class="container">
+                <div class="action-buttons">
+                    <a href="#" class="btn-primary" id="downloadWhitepaper">Download Whitepaper</a>
+                    <button class="btn-primary" id="addToWallet">Add AHV to Wallet</button>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>Quick Links</h3>
+                        <a href="#features">Features</a>
+                        <a href="#invest">Why Invest</a>
+                        <a href="#tokenomics">Tokenomics</a>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Resources</h3>
+                        <a href="#">Documentation</a>
+                        <a href="#">Whitepaper</a>
+                        <a href="#">Support</a>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Contact</h3>
+                        <a href="mailto:ahsanimamkhan06@gmail.com">ahsanimamkhan06@gmail.com</a>
+                        <a href="https://x.com/khan143262?s=21" target="_blank">X (Twitter)</a>
+                        <a href="#">Telegram</a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 AhsanVerse. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="app.js"></script>
+        
+        <!-- Direct Demo Purchase Script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const demoButton = document.getElementById('demoTokenPurchase');
+                if (demoButton) {
+                    demoButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        const payAmountInput = document.getElementById('payAmount');
+                        const receiveAmountInput = document.getElementById('receiveAmount');
+                        
+                        if (!payAmountInput || !receiveAmountInput) {
+                            alert('Please enter an amount first');
+                            return;
+                        }
+                        
+                        const ethAmount = parseFloat(payAmountInput.value);
+                        const tokenAmount = parseFloat(receiveAmountInput.value);
+                        
+                        if (!ethAmount || ethAmount <= 0) {
+                            alert('Please enter a valid amount');
+                            return;
+                        }
+                        
+                        // Show processing message
+                        alert('Processing your purchase in demo mode (no actual ETH will be spent)');
+                        
+                        // Add transaction to history if user is logged in
+                        const currentUser = JSON.parse(localStorage.getItem('ahsanverseCurrentUser') || '{}');
+                        if (currentUser && currentUser.loggedIn) {
+                            // Function to add transaction
+                            function addDemoTransaction(type, amount, token, status) {
+                                // Get user transactions from localStorage or initialize empty array
+                                const transactions = JSON.parse(localStorage.getItem(`ahsanverse_transactions_${currentUser.email}`) || '[]');
+                                
+                                // Add new transaction
+                                transactions.push({
+                                    date: new Date().toISOString(),
+                                    type,
+                                    amount,
+                                    token,
+                                    status
+                                });
+                                
+                                // Save updated transactions
+                                localStorage.setItem(`ahsanverse_transactions_${currentUser.email}`, JSON.stringify(transactions));
+                                
+                                // Reload transactions in UI if function exists
+                                if (window.loadUserTransactions) {
+                                    window.loadUserTransactions();
+                                }
+                            }
+                            
+                            // Add transaction with pending status
+                            addDemoTransaction('Demo Purchase', tokenAmount, 'AHV', 'Pending');
+                            
+                            // Update token balance (simulated)
+                            const userTokenBalance = document.getElementById('userTokenBalance');
+                            if (userTokenBalance) {
+                                const currentBalance = parseFloat(userTokenBalance.textContent) || 0;
+                                userTokenBalance.textContent = (currentBalance + tokenAmount).toFixed(2);
+                            }
+                            
+                            // After a delay, update transaction to completed (simulated blockchain confirmation)
+                            setTimeout(() => {
+                                // Get the latest transactions
+                                const transactions = JSON.parse(localStorage.getItem(`ahsanverse_transactions_${currentUser.email}`) || '[]');
+                                
+                                // Find the pending transaction and update it
+                                const pendingIndex = transactions.findIndex(t => t.status === 'Pending');
+                                if (pendingIndex !== -1) {
+                                    transactions[pendingIndex].status = 'Completed';
+                                    localStorage.setItem(`ahsanverse_transactions_${currentUser.email}`, JSON.stringify(transactions));
+                                    
+                                    // Reload transactions in UI if function exists
+                                    if (window.loadUserTransactions) {
+                                        window.loadUserTransactions();
+                                    }
+                                }
+                            }, 3000); // Simulate 3-second blockchain confirmation
+                        } else {
+                            alert('Please log in first to track your purchases');
+                        }
+                        
+                        // Show success message after a short delay
+                        setTimeout(() => {
+                            alert(`Transaction successful! You have purchased ${tokenAmount} AHV tokens.`);
+                        }, 1500);
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>
