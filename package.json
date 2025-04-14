@@ -1,33 +1,16 @@
 {
-  "name": "web3-blockchain-app",
+  "name": "ahsanverse-blockchain",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "npx http-server .",
+    "build": "echo 'No build step required'",
+    "start": "npx http-server ."
   },
   "dependencies": {
-    "@rainbow-me/rainbowkit": "^2.2.4",
-    "@web3modal/ethereum": "^2.7.1",
-    "@web3modal/react": "^2.7.1",
-    "ethers": "^5.7.2",
-    "next": "^14.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "viem": "^2.26.3",
-    "wagmi": "^2.14.16"
+    "ethers": "^5.7.2"
   },
   "devDependencies": {
-    "@types/node": "^20.11.5",
-    "@types/react": "^18.2.48",
-    "@types/react-dom": "^18.2.18",
-    "autoprefixer": "^10.4.17",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "^14.1.0",
-    "postcss": "^8.4.33",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "http-server": "^14.1.1"
   }
 }
