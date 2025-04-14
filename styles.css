@@ -487,7 +487,7 @@ html {
 .modal {
     display: none;
     position: fixed;
-    z-index: 2000;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
@@ -498,40 +498,52 @@ html {
 }
 
 .modal-content {
-    background: var(--secondary-color);
+    background: linear-gradient(145deg, #111111, #1a1a1a);
     margin: 10% auto;
     padding: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
     width: 90%;
     max-width: 500px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(212, 175, 55, 0.3);
     position: relative;
+    animation: modalFadeIn 0.4s ease-out;
 }
 
-.close-modal {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-}
-
-.close-modal:hover {
-    color: var(--primary-color);
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .modal h2 {
     color: var(--primary-color);
-    margin-bottom: 25px;
     text-align: center;
+    margin-bottom: 25px;
+    font-size: 2rem;
+    font-weight: 700;
 }
 
-/* Form Styles */
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: var(--primary-color);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-modal:hover {
+    color: #fff;
+}
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -539,41 +551,70 @@ html {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #ddd;
+    color: #e6e6e6;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .form-group input {
     width: 100%;
     padding: 12px 15px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
     font-size: 1rem;
-    transition: border 0.3s ease;
+    transition: all 0.3s;
 }
 
 .form-group input:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
-.form-footer {
+.form-switch {
     margin-top: 20px;
     text-align: center;
-    color: #aaa;
+    color: #e6e6e6;
+    font-size: 0.9rem;
 }
 
-.form-footer span {
+.form-switch a {
     color: var(--primary-color);
-    cursor: pointer;
-    transition: opacity 0.3s ease;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
 }
 
-.form-footer span:hover {
-    opacity: 0.8;
+.form-switch a:hover {
+    color: #fff;
     text-decoration: underline;
+}
+
+.btn.primary-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: var(--gold-gradient);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.btn.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn.primary-btn:active {
+    transform: translateY(0);
 }
 
 /* Footer */
@@ -2011,7 +2052,7 @@ footer {
 .btn-secondary:hover {
     background: rgba(212, 175, 55, 0.1);
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(212, 175, 55, 0.2);
     border-color: var(--accent-color);
 }
 

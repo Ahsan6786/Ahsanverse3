@@ -222,6 +222,53 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Modal functionality
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'block';
+        });
+    }
+    
+    if (registerBtn) {
+        registerBtn.addEventListener('click', () => {
+            registerModal.style.display = 'block';
+        });
+    }
+    
+    if (showRegisterForm) {
+        showRegisterForm.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'block';
+        });
+    }
+    
+    if (showLoginForm) {
+        showLoginForm.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'block';
+        });
+    }
+    
+    // Close modals
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'none';
+        });
+    });
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target === loginModal) {
+            loginModal.style.display = 'none';
+        }
+        if (e.target === registerModal) {
+            registerModal.style.display = 'none';
+        }
+    });
 });
 
 // Update token information in UI
