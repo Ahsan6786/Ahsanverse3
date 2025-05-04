@@ -1,6 +1,6 @@
 # AhsanVerse Whitepaper
 
-[Insert your AhsanCoin logo here]
+
 
 ## 1. Executive Summary
 - AhsanVerse is a revolutionary blockchain platform combining AI technology with decentralized solutions

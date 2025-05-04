@@ -3,14 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npx http-server .",
+    "dev": "node server.js",
     "build": "echo 'No build step required'",
-    "start": "npx http-server ."
+    "start": "node server.js",
+    "compile": "npx hardhat compile",
+    "deploy:local": "npx hardhat run scripts/deploy-token.js --network localhost",
+    "deploy:testnet": "npx hardhat run scripts/deploy-token.js --network sepolia",
+    "deploy:mainnet": "npx hardhat run scripts/deploy-token.js --network mainnet",
+    "node": "npx hardhat node",
+    "test": "npx hardhat test"
   },
   "dependencies": {
-    "ethers": "^5.7.2"
+    "@openzeppelin/contracts": "^4.9.3",
+    "@sendgrid/mail": "^8.1.5",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "ethers": "^5.7.2",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.6.1",
+    "nodemailer": "^6.10.1",
+    "nodemailer-mailgun-transport": "^2.1.5"
   },
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "chai": "^4.3.7",
+    "ethereum-waffle": "^4.0.10",
+    "hardhat": "^2.17.1",
+    "http-server": "^14.1.1",
+    "solidity-coverage": "^0.8.4"
   }
 }

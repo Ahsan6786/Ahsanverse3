@@ -391,7 +391,6 @@
                             <input type="number" id="receiveAmount" readonly placeholder="0.00">
                         </div>
                         <button id="buyTokens" class="buy-btn">Buy Tokens</button>
-                        <button id="demoTokenPurchase" class="buy-btn demo-btn" style="margin-top: 10px; background: #4a4a4a;">Demo Purchase (No MetaMask)</button>
                     </div>
                 </div>
             </div>
@@ -446,8 +445,66 @@
                         <input type="password" id="loginPassword" required>
                     </div>
                     <button type="submit" class="btn primary-btn">Login</button>
+                    <p class="form-switch">Forgot password? <a href="#" id="showForgotPassword">Click here</a></p>
                     <p class="form-switch">Don't have an account? <a href="#" id="showRegisterForm">Register</a></p>
                 </form>
+            </div>
+        </div>
+
+        <!-- Password Reset Modal -->
+        <div id="forgotPasswordModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Forgot Password</h2>
+                <p>Enter your email address below. We'll send you a verification code to reset your password.</p>
+                <form id="forgotPasswordForm">
+                    <div class="form-group">
+                        <label for="forgotEmail">Email</label>
+                        <input type="email" id="forgotEmail" required>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Send Verification Code</button>
+                    <p class="form-switch">Remember your password? <a href="#" id="backToLogin">Login</a></p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Reset Password Modal -->
+        <div id="resetPasswordModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Reset Password</h2>
+                
+                <!-- Step 1: Verify OTP -->
+                <div id="verifyOTPSection">
+                    <p>Enter the verification code that was sent to your email.</p>
+                    <form id="verifyOTPForm">
+                        <div class="form-group">
+                            <label for="resetEmail">Email</label>
+                            <input type="email" id="resetEmail" readonly required>
+                        </div>
+                        <div class="form-group">
+                            <label for="verificationCode">Verification Code</label>
+                            <input type="text" id="verificationCode" placeholder="Enter 6-digit code" required>
+                        </div>
+                        <button type="submit" class="btn primary-btn">Verify Code</button>
+                    </form>
+                </div>
+                
+                <!-- Step 2: Reset Password -->
+                <div id="resetPasswordSection" style="display: none;">
+                    <p>Create a new password for your account.</p>
+                    <form id="resetPasswordForm">
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmNewPassword">Confirm New Password</label>
+                            <input type="password" id="confirmNewPassword" required>
+                        </div>
+                        <button type="submit" class="btn primary-btn">Reset Password</button>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -507,99 +564,34 @@
             </div>
         </footer>
 
+        <!-- Chat Support Icon -->
+        <div class="chat-support-icon" id="chatSupportIcon">
+            <i class="fa-solid fa-comment-dots"></i>
+        </div>
+
+        <!-- Chat Widget -->
+        <div class="chat-widget" id="chatWidget">
+            <div class="chat-header">
+                <div>AhsanVerse Support</div>
+                <div class="chat-close" id="chatClose">&times;</div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message support-message">
+                    Hello! Welcome to AhsanVerse. How can I help you today?
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Type your message here...">
+                <button class="send-button" id="sendMessage">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Add Font Awesome for icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
         <script src="app.js"></script>
-        
-        <!-- Direct Demo Purchase Script -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const demoButton = document.getElementById('demoTokenPurchase');
-                if (demoButton) {
-                    demoButton.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        
-                        const payAmountInput = document.getElementById('payAmount');
-                        const receiveAmountInput = document.getElementById('receiveAmount');
-                        
-                        if (!payAmountInput || !receiveAmountInput) {
-                            alert('Please enter an amount first');
-                            return;
-                        }
-                        
-                        const ethAmount = parseFloat(payAmountInput.value);
-                        const tokenAmount = parseFloat(receiveAmountInput.value);
-                        
-                        if (!ethAmount || ethAmount <= 0) {
-                            alert('Please enter a valid amount');
-                            return;
-                        }
-                        
-                        // Show processing message
-                        alert('Processing your purchase in demo mode (no actual ETH will be spent)');
-                        
-                        // Add transaction to history if user is logged in
-                        const currentUser = JSON.parse(localStorage.getItem('ahsanverseCurrentUser') || '{}');
-                        if (currentUser && currentUser.loggedIn) {
-                            // Function to add transaction
-                            function addDemoTransaction(type, amount, token, status) {
-                                // Get user transactions from localStorage or initialize empty array
-                                const transactions = JSON.parse(localStorage.getItem(`ahsanverse_transactions_${currentUser.email}`) || '[]');
-                                
-                                // Add new transaction
-                                transactions.push({
-                                    date: new Date().toISOString(),
-                                    type,
-                                    amount,
-                                    token,
-                                    status
-                                });
-                                
-                                // Save updated transactions
-                                localStorage.setItem(`ahsanverse_transactions_${currentUser.email}`, JSON.stringify(transactions));
-                                
-                                // Reload transactions in UI if function exists
-                                if (window.loadUserTransactions) {
-                                    window.loadUserTransactions();
-                                }
-                            }
-                            
-                            // Add transaction with pending status
-                            addDemoTransaction('Demo Purchase', tokenAmount, 'AHV', 'Pending');
-                            
-                            // Update token balance (simulated)
-                            const userTokenBalance = document.getElementById('userTokenBalance');
-                            if (userTokenBalance) {
-                                const currentBalance = parseFloat(userTokenBalance.textContent) || 0;
-                                userTokenBalance.textContent = (currentBalance + tokenAmount).toFixed(2);
-                            }
-                            
-                            // After a delay, update transaction to completed (simulated blockchain confirmation)
-                            setTimeout(() => {
-                                // Get the latest transactions
-                                const transactions = JSON.parse(localStorage.getItem(`ahsanverse_transactions_${currentUser.email}`) || '[]');
-                                
-                                // Find the pending transaction and update it
-                                const pendingIndex = transactions.findIndex(t => t.status === 'Pending');
-                                if (pendingIndex !== -1) {
-                                    transactions[pendingIndex].status = 'Completed';
-                                    localStorage.setItem(`ahsanverse_transactions_${currentUser.email}`, JSON.stringify(transactions));
-                                    
-                                    // Reload transactions in UI if function exists
-                                    if (window.loadUserTransactions) {
-                                        window.loadUserTransactions();
-                                    }
-                                }
-                            }, 3000); // Simulate 3-second blockchain confirmation
-                        } else {
-                            alert('Please log in first to track your purchases');
-                        }
-                        
-                        // Show success message after a short delay
-                        setTimeout(() => {
-                            alert(`Transaction successful! You have purchased ${tokenAmount} AHV tokens.`);
-                        }, 1500);
-                    });
-                }
-            });
-        </script>
     </body>
 </html>
